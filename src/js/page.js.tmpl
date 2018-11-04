@@ -1,0 +1,102 @@
+Page({
+  data: {
+    pageId: '',
+  },
+
+  onLoad(query) {
+    const pageId = this.pageId = `p-${tool.getId()}` // 页面 id
+    const nodeIdMap = {}
+    const document = this.document = new Document(pageId, pageKey, ast, nodeIdMap);
+    const window = this.window = new Window(pageId, pageKey);
+
+    // 处理页面参数，只有当页面是其他页面打开或跳转时才处理
+    if (query.type === 'open' || query.type === 'jump') {
+      if (query.search) window.location.search = decodeURIComponent(query.search)
+      if (query.hash) window.location.hash = decodeURIComponent(query.hash)
+    }
+
+    initGlobalVar(window, document);
+    initDocumentVar(window, document);
+
+    cache.init(pageId, {
+      document,
+      window,
+      nodeIdMap,
+    });
+  },
+
+  onUnload() {
+    cache.destroy(this.pageId)
+  },
+
+  onReady() {
+    this.setData({
+      pageId: this.pageId
+    }, () => {
+      // 延迟执行，保证 webview 上的信息可以完整获取
+      setTimeout(() => {
+        this.window._$fetchWebviewInfo(this).then(() => {
+          try {
+            this.init()
+          } catch (err) {
+            console.error(err)
+          }
+        }).catch(err => {
+          console.warn('webview 端数据获取失败，可能会造成 getComputedStyle、getBoundingClientRect 等接口无法使用')
+          
+          try {
+            this.init()
+          } catch (err) {
+            console.error(err)
+          }
+        })
+      }, 0)
+    })
+  },
+
+  /**
+   * 初始化页面
+   */
+  init() {
+    const window = this.window
+    const document = this.document
+
+    // 监听节点变化
+    this.onDomTreeUpdate = this.onDomTreeUpdate.bind(this)
+    window.addEventListener('_domTreeUpdate', tool.throttle(this.onDomTreeUpdate, 100))
+
+    run(window, document); // 执行 appService 端页面初始化逻辑
+
+    // document 的 DOMContentLoaded 事件
+    document.documentElement._$trigger('DOMContentLoaded', {
+      event: new Event({
+        name: 'DOMContentLoaded',
+        target: document,
+        eventPhase: Event.AT_TARGET
+      }),
+      currentTarget: document,
+    })
+
+    // window 的 load 事件
+    window._$trigger('load', {
+      event: new Event({
+        name: 'load',
+        target: window,
+        eventPhase: Event.AT_TARGET
+      }),
+      currentTarget: window,
+    })
+  },
+
+  /**
+   * 监听节点变化
+   */
+  onDomTreeUpdate() {
+    this.window._$fetchWebviewInfo(this).then(() => {
+      // ignore
+    }).catch(err => {
+      console.warn('webview 端数据获取失败，可能会造成 getComputedStyle、getBoundingClientRect 等接口无法使用')
+      this.init()
+    })
+  }
+});

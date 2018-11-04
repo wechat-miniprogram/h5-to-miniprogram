@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vote waterfall flow</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <header>
+        <div class="time">
+                评选时间:2015年6月
+        </div>
+        <div class="container">
+            <div class="title">2015浙江在线优秀员工评选</div>
+            <div class="subtitle">2015 THE LIST OF THE GOOD EMPLOYEES</div>
+        </div>
+    </header>
+    <nav>
+        <div class="nav-item">
+            <div class="title">候选人</div>
+            <div class="number">98</div>
+        </div>
+        <div class="nav-item">
+            <div class="title">总投票数</div>
+            <div class="number">1280</div>
+        </div>
+        <div class="nav-item">
+            <div class="title">活动热度</div>
+            <div class="number">800</div>
+        </div>
+    </nav>
+    <div class="timer">
+        <span class="title">第一轮投票剩余时间：</span><span class="time">3天23小时15分钟59秒</span>
+    </div>
+    <div id="wrapper">
+        <div>
+            <div class="pull-refresh" id="pull-refresh">
+                <div class="arrow" id="arrow">
+                        <img src="https://raw.githubusercontent.com/AlloyTeam/AlloyTouch/master/refresh/pull_refresh/asset/arrow.png" alt="arrow"><br>
+                </div>
+            </div>
+            <div id="toploading">
+                <img src="./images/200.gif" alt="loading">
+            </div>
+            <ul class="wrapper">
+            </ul>
+            <div class="bottom" id="bottom">
+                <span class="line"></span>
+                <span class="tip">我是底线</span>
+                <span class="line"></span>
+            </div>
+            <div class="loading" id="loading">
+                <img src="./images/200.gif" alt="loading">
+            </div>
+        </div>
+    </div>
+
+    <script
+    src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+    <script src="./js/rem.js"></script>
+    <script src="./dist/bundle.js"></script>
+</body>
+</html>
