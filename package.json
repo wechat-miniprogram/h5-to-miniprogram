@@ -1,13 +1,12 @@
 {
   "name": "h5-to-miniprogram",
-  "version": "0.0.3",
-  "description": "some to miniprogram",
+  "version": "0.0.4",
+  "description": "a simple tool for transforming h5 to miniprogam",
   "main": "index.js",
   "scripts": {
     "lint": "eslint \"src/**/*.js\" --fix",
     "lint-test": "eslint \"test/**/*.test.js\" --fix",
-    "test": "jest \"./test/(.*)/(.*).test.js\" --silent --bail",
-    "coverage": "jest \"./test/(.*)/(.*).test.js\" --coverage --bail"
+    "test": "jest \"./test/(.*)/(.*).test.js\" --silent --bail"
   },
   "keywords": [
     "miniprogram",
@@ -19,16 +18,13 @@
     "html5"
   ],
   "jest": {
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "src/*.js"
-    ]
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JuneAndGreen/some-to-miniprogram.git"
+    "url": "https://github.com/wechat-miniprogram/h5-to-miniprogram.git"
   },
-  "author": "june_01",
+  "author": "wechat-miniprogram",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^5.3.0",
