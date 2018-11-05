@@ -49,7 +49,7 @@ module.exports = {
 此工具暴露了一个 async 函数，函数只接收一个参数，类型为对象。此参数各字段描述如下：
 
 | 参数名 | 类型 | 是否必需 | 描述 |
-|---|---|---|
+|---|---|---|---|
 | entry | String/Object | 是 | 入口，支持多个页面，每个页面都有自己唯一的 pageKey。当直接传入一个路径时，则该路径对应的页面的 pageKey 为 index |
 | output | String | 否 | 输出目录，输出的内容是一个完整可运行的小程序项目，默认为当前运行目录下的 h5\_to\_miniprogram\_output 目录中 |
 | config | String | 否 | 配置文件路径 |
