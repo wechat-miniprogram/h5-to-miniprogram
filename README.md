@@ -164,3 +164,8 @@ module.exports = function(loadModule, moduleName) {
 * webgl。
 * 样式中的属性选择器。
 * ...
+
+## 基础库依赖
+
+*  wxss 的 id 选择器依赖 2.3.2 基础库。
+
