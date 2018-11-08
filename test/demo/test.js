@@ -8,9 +8,9 @@ toMiniprogram({
   // 入口
   entry: {
     demo1: path.join(__dirname, './demo1/index.html'),
-    demo2: path.join(__dirname, './demo2/index.html'),
+    demo2: path.join(__dirname, './demo2/index.html'), // jquery + 表单 + 异步请求
     demo3: path.join(__dirname, './demo3/index.html'),
-    demo4: path.join(__dirname, './demo4/index.html'),
+    demo4: path.join(__dirname, './demo4/index.html'), // jquery
     demo5: path.join(__dirname, './demo5/index.html'), // canvas
     // demo6: path.join(__dirname, './demo6/index.html'),
     demo7: path.join(__dirname, './demo7/index.html'), // webpack + vue

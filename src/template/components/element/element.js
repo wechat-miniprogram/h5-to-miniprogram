@@ -50,7 +50,7 @@ function checkDiffChildNodes(newChildNodes, oldChildNodes) {
 Component({
   data: {
     children: [], // 孩子节点
-    compName: '',
+    wxCompName: '',
     // img
     src: '',
     // canvas
@@ -180,7 +180,7 @@ Component({
      * 初始化 img 标签
      */
     initImg(data) {
-      data.compName = 'img'
+      data.wxCompName = 'image'
       data.src = this.domNode.src
     },
 
@@ -220,7 +220,7 @@ Component({
      * 初始化 canvas 标签
      */
     initCanvas(data) {
-      data.compName = 'h5-canvas'
+      data.wxCompName = 'canvas'
       data.canvasId = this.nodeId
 
       this.domNode._$context = wx.createCanvasContext(this.nodeId, this)
@@ -246,11 +246,13 @@ Component({
      * 初始化 input 标签
      */
     initInput(data) {
-      data.compName = 'h5-input'
+      data.wxCompName = 'input'
       data.type = this.domNode.type
       data.value = this.domNode.value
       data.disabled = this.domNode.disabled
       data.maxlength = this.domNode.maxlength
+
+      if (data.type === 'number') data.type = 'digit' // 调整为带小数点
     },
 
     /**
