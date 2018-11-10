@@ -69,22 +69,16 @@ test('image', async () => {
     image1Count++
     expectImage1Count = 1
     image1.src = 'https://a.b.c'
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), 20)
-    })
+    await new Promise((resolve, reject) => setTimeout(resolve, 20))
     isSuccess = true // 下一次请求为成功
     image1Count++
     expectImage1Count = 2
     image1.src = 'https://c.b.a'
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), 20)
-    })
+    await new Promise((resolve, reject) => setTimeout(resolve, 20))
     image1Count++
     expectImage1Count = 3
     image1.src = 'https://c.b.a'
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), 20)
-    })
+    await new Promise((resolve, reject) => setTimeout(resolve, 20))
 
     // 不带宽高
     isSuccess = false
@@ -115,20 +109,14 @@ test('image', async () => {
     image2Count++
     expectImage2Count = 1
     image2.src = 'https://d.e.f'
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), 20)
-    })
+    await new Promise((resolve, reject) => setTimeout(resolve, 20))
     isSuccess = true // 下一次请求为成功
     image2Count++
     expectImage2Count = 2
     image2.src = 'https://f.e.d'
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), 20)
-    })
+    await new Promise((resolve, reject) => setTimeout(resolve, 20))
     image2Count++
     expectImage2Count = 3
     image2.src = 'https://f.e.d'
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), 20)
-    })
+    await new Promise((resolve, reject) => setTimeout(resolve, 20))
 })

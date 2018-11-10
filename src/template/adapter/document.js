@@ -12,6 +12,7 @@ const A = load('A')
 const Image = load('Image')
 const Canvas = load('Canvas')
 const Input = load('Input')
+const Cookie = load('Cookie')
 
 class Document extends EventTarget {
   constructor(pageId, pageKey, ast, nodeIdMap) {
@@ -47,6 +48,7 @@ class Document extends EventTarget {
     this._pageId = pageId
     this._pageKey = pageKey
     this._tree = new Tree(pageId, ast, nodeIdMap, this)
+    this._cookie = new Cookie()
 
     // documentElement
     this._node = this._$createElement({
@@ -134,6 +136,20 @@ class Document extends EventTarget {
 
   get defaultView() {
     return cache.getWindow(this._pageId) || null
+  }
+
+  get URL() {
+    if (this.defaultView) return this.defaultView.location.href
+  }
+
+  get cookie() {
+    return this._cookie.getCookie(this.URL)
+  }
+
+  set cookie(value) {
+    if (!value || typeof value !== 'string') return
+
+    this._cookie.setCookie(value, this.URL)
   }
 
   getElementById(id) {

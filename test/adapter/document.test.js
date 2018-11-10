@@ -9,6 +9,11 @@ const TextNode = load('TextNode')
 const Node = load('Node')
 const tool = load('tool')
 const cache = load('cache')
+const config = load('config')
+
+config.urlMap = {
+  'index': 'https://sub.host.com:8080/p/a/t/h?query=string#hash',
+}
 
 const nodeIdMap = {}
 const pageId = `p-${tool.getId()}`
@@ -27,8 +32,9 @@ beforeAll(async () => {
     })
 })
 
-test('document: nodeType', () => {
+test('document: nodeType/URL', () => {
     expect(document.nodeType).toBe(Node.DOCUMENT_NODE)
+    expect(document.URL).toBe(window.location.href)
 })
 
 test('document: documentElement', () => {

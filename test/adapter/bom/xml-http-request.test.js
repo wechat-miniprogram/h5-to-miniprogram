@@ -93,11 +93,7 @@ test('xml-http-request', async () => {
   expect(timeoutCount).toBe(0)
   xhr._readyState = XMLHttpRequest.OPENED // 利用私有字段调整 readyState，为了再次发送请求
   xhr.send('timeout')
-  await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve()
-    }, 300)
-  })
+  await new Promise((resolve, reject) => setTimeout(resolve, 300))
   expect(xhr.readyState).toBe(XMLHttpRequest.DONE)
   expect(readyStateChangeCount).toBe(3)
   expect(timeoutCount).toBe(1)
