@@ -6,7 +6,7 @@ const Navigator = load('Navigator')
 const Node = load('Node')
 const cache = load('cache')
 const styleList = load('styleList')
-const XMLHttpRequest = load('XMLHttpRequest')
+const Request = load('XMLHttpRequest')
 const CustomEvent = load('CustomEvent')
 const LocalStorage = load('LocalStorage')
 const SessionStorage = load('SessionStorage')
@@ -161,7 +161,11 @@ class Window extends EventTarget {
   }
 
   get XMLHttpRequest() {
-    return XMLHttpRequest
+    const that = this
+
+    return function XMLHttpRequest(...args) {
+      return new Request(that, ...args)
+    }
   }
 
   get self() {

@@ -108,6 +108,7 @@ module.exports = function(loadModule, moduleName) {
 
 1. bom 相关
 
+* Cookie
 * LocalStorage
 * Location
 * Navigator
@@ -127,6 +128,7 @@ module.exports = function(loadModule, moduleName) {
 * Canvas
 * Image
 * Input
+
 * Attribute
 * ClassList
 * Element

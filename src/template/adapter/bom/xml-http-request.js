@@ -53,9 +53,10 @@ const STATUS_TEXT_MAP = {
 }
 
 class XMLHttpRequest extends EventTarget {
-  constructor() {
+  constructor(window) {
     super()
 
+    this._window = window
     this._method = ''
     this._url = ''
     this._data = null
@@ -114,10 +115,16 @@ class XMLHttpRequest extends EventTarget {
     this._resHeader = null
     this._response = null
 
+    // 头信息
+    const header = Object.assign({}, this._header)
+    if (this._window) {
+      header.cookie = this._window.document.cookie
+    }
+
     this._requestTask = wx.request({
       url: this._url,
       data: this._data,
-      header: this._header,
+      header,
       method: this._method,
       dataType: this._responseType === 'json' ? 'json' : 'text',
       responseType: this._responseType === 'arraybuffer' ? 'arraybuffer' : 'text',
@@ -136,6 +143,39 @@ class XMLHttpRequest extends EventTarget {
 
     this._callReadyStateChange(XMLHttpRequest.HEADERS_RECEIVED)
 
+    // 处理 set-cookie
+    if (this._window) {
+      const setCookie = header['Set-Cookie']
+
+      if (setCookie && typeof setCookie === 'string') {
+        let start = 0
+        let startSplit = 0
+        let nextSplit = setCookie.indexOf(',', startSplit)
+        const cookies = []
+
+        while (nextSplit >= 0) {
+          const lastSplitStr = setCookie.substring(start, nextSplit)
+          const splitStr = setCookie.substr(nextSplit)
+
+          // eslint-disable-next-line no-control-regex
+          if (/^,\s*([^,=;\x00-\x1F]+)=([^;\n\r\0\x00-\x1F]*).*/.test(splitStr)) {
+            // 分割成功，则上一片是完整 cookie
+            cookies.push(lastSplitStr)
+            start = nextSplit + 1
+          }
+
+          startSplit = nextSplit + 1
+          nextSplit = setCookie.indexOf(',', startSplit)
+        }
+
+        // 塞入最后一片 cookie
+        cookies.push(setCookie.substr(start))
+
+        cookies.forEach(cookie => this._window.document.cookie = cookie)
+      }
+    }
+
+    // 处理返回数据
     if (data) {
       this._callReadyStateChange(XMLHttpRequest.LOADING)
       this._$trigger('loadstart')

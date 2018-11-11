@@ -13,6 +13,7 @@ class Cookie {
     cookieStr = cookieStr.trim().split(';')
 
     // key-value
+    // eslint-disable-next-line no-control-regex
     const parseKeyValue = /^([^=;\x00-\x1F]+)=([^;\n\r\0\x00-\x1F]*).*/.exec(cookieStr.shift())
     if (!parseKeyValue) return null
 
@@ -31,12 +32,12 @@ class Cookie {
       item = item.trim()
       if (!item) continue
 
-      let [key, value] = item.split('=') 
+      let [key, value] = item.split('=')
       key = (key || '').trim().toLowerCase()
       value = (value || '').trim()
 
       if (!key) continue
-      
+
       switch (key) {
         case 'path':
           if (value[0] === '/') path = value
@@ -60,10 +61,15 @@ class Cookie {
         case 'httponly':
           httpOnly = true
           break
+        default:
+          // ignore
+          break
       }
     }
 
-    return {key, value, path, domain, expires, maxAge, secure, httpOnly}
+    return {
+      key, value, path, domain, expires, maxAge, secure, httpOnly
+    }
   }
 
   /**
@@ -83,6 +89,7 @@ class Cookie {
   _checkPath(path, cookiePath) {
     if (path === cookiePath) return true
 
+    cookiePath = cookiePath === '/' ? '' : cookiePath
     return path.indexOf(`${cookiePath}/`) === 0
   }
 
@@ -94,7 +101,7 @@ class Cookie {
 
     // maxAge 优先
     if (cookie.maxAge !== null) return cookie.createTime + cookie.maxAge > now
-    
+
     // 判断 expires
     if (cookie.expires !== null) return cookie.expires > now
 
@@ -153,7 +160,9 @@ class Cookie {
    * 拉取 cookie
    */
   getCookie(url) {
-    const {protocol, hostname, port, pathname} = Location._$parse(url)
+    const {
+      protocol, hostname, port, pathname
+    } = Location._$parse(url)
     const host = ((hostname || '') + (port ? ':' + port : '')) || ''
     const path = (pathname || '')[0] === '/' ? pathname : '/'
     const res = []

@@ -72,15 +72,44 @@ const table = (function($, win){
 
 table.init();
 
-// test ajax
+// test ajax1
 $.support.cors = true;
 $.ajax({
   url: 'https://api.npmjs.org/downloads/range/last-week/miniprogram-sm-crypto',
   dataType: 'json',
   success(data) {
-    console.log('ajax success', data);
+    console.log('ajax1 success', data);
   },
   error() {
-    console.log('ajax error');
+    console.log('ajax1 error');
+  },
+});
+
+// test ajax2
+document.cookie = 'aaa=bbb; max-age=1000'
+$.ajax({
+  url: 'http://127.0.0.1:9420/demo2/test',
+  dataType: 'json',
+  success(data) {
+    console.log('ajax2 success; show cookie', document.cookie);
+
+    // test ajax show request cookies
+    $.ajax({
+      url: 'http://127.0.0.1:9420/action',
+      method: 'POST',
+      data: {
+        needDo: 'showRequestCookie',
+      },
+      dataType: 'json',
+      success(data) {
+        console.log('ajax show request cookie success', data);
+      },
+      error() {
+        console.log('ajax show request cookie error');
+      },
+    });
+  },
+  error() {
+    console.log('ajax2 error');
   },
 });

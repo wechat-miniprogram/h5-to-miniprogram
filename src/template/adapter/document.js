@@ -140,6 +140,8 @@ class Document extends EventTarget {
 
   get URL() {
     if (this.defaultView) return this.defaultView.location.href
+
+    return ''
   }
 
   get cookie() {
