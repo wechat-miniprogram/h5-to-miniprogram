@@ -37,6 +37,7 @@ function wrapNative(clazz) {
 const MODULE_MAP = {
   // bom 相关
   Cookie: () => require('./bom/cookie'),
+  History: () => require('./bom/history'),
   LocalStorage: () => require('./bom/local-storage'),
   Location: () => require('./bom/location'),
   Navigator: () => require('./bom/navigator'),
@@ -56,6 +57,7 @@ const MODULE_MAP = {
   Input: () => require('./node/element/input'),
   Attribute: () => require('./node/attribute'),
   ClassList: () => require('./node/class-list'),
+  Comment: () => require('./node/comment'),
   Element: () => require('./node/element'),
   Node: () => require('./node/node'),
   styleList: () => require('./node/style-list'),

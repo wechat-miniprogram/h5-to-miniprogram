@@ -6,6 +6,7 @@ const Document = load('Document')
 const Window = load('Window')
 const Element = load('Element')
 const TextNode = load('TextNode')
+const Comment = load('Comment')
 const Node = load('Node')
 const tool = load('tool')
 const cache = load('cache')
@@ -139,6 +140,29 @@ test('document: createTextNode', () => {
     const node2 = document.createTextNode('321')
     expect(node2).toBeInstanceOf(TextNode)
     expect(node2.textContent).toBe('321')
+})
+
+test('document: createComment', () => {
+    const node1 = document.createComment('123')
+    expect(node1).toBeInstanceOf(Comment)
+
+    const node2 = document.createComment('321')
+    expect(node2).toBeInstanceOf(Comment)
+
+    const parent = document.createElement('div')
+    const child = document.createElement('div')
+    parent.appendChild(child)
+    expect(parent.childNodes.length).toBe(1)
+    expect(parent.childNodes[0]).toBe(child)
+    parent.appendChild(node1)
+    expect(parent.childNodes.length).toBe(1)
+    expect(parent.childNodes[0]).toBe(child)
+    parent.insertBefore(node1, child)
+    expect(parent.childNodes.length).toBe(1)
+    expect(parent.childNodes[0]).toBe(child)
+    parent.replaceChild(node1, child)
+    expect(parent.childNodes.length).toBe(1)
+    expect(parent.childNodes[0]).toBe(child)
 })
 
 test('document: createDocumentFragment', () => {

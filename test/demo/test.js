@@ -7,14 +7,18 @@ rimraf.sync(path.join(__dirname, './output/common'))
 toMiniprogram({
   // 入口
   entry: {
-    demo1: path.join(__dirname, './demo1/index.html'),
-    demo2: path.join(__dirname, './demo2/index.html'), // jquery + 表单 + 异步请求
-    demo3: path.join(__dirname, './demo3/index.html'),
-    demo4: path.join(__dirname, './demo4/index.html'), // jquery
-    demo5: path.join(__dirname, './demo5/index.html'), // canvas
-    // demo6: path.join(__dirname, './demo6/index.html'),
-    demo7: path.join(__dirname, './demo7/index.html'), // webpack + vue
-    demo8: path.join(__dirname, './demo8/index.html'), // webpack + react
+    demo01: path.join(__dirname, './demo01/index.html'),
+    demo02: path.join(__dirname, './demo02/index.html'), // jquery + 表单 + 异步请求
+    demo03: path.join(__dirname, './demo03/index.html'),
+    // demo04: path.join(__dirname, './demo04/index.html'), // jquery
+    // demo05: path.join(__dirname, './demo05/index.html'), // canvas
+    // demo06: path.join(__dirname, './demo06/index.html'),
+    // demo07: path.join(__dirname, './demo07/index.html'), // webpack + vue
+    // demo08: path.join(__dirname, './demo08/index.html'), // webpack + react
+    demo09: path.join(__dirname, './demo09/index.html'), // webpack + vue + vue-router(hash)
+    demo10: path.join(__dirname, './demo10/index.html'), // webpack + vue + vue-router(history)
+    demo11: path.join(__dirname, './demo11/index.html'), // webpack + react + react-router(hash)
+    demo12: path.join(__dirname, './demo12/index.html'), // webpack + react + react-router(history)
   },
   // 输出目录
   output: path.join(__dirname, './output'),

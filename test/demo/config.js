@@ -1,4 +1,4 @@
-const demo3SrcMap = {
+const demo03SrcMap = {
   '../fonts/fontawesome-webfont.eot?v=4.7.0': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo3/font-awesome-4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0',
   '../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo3/font-awesome-4.7.0/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0',
   '../fonts/fontawesome-webfont.woff2?v=4.7.0': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo3/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0',
@@ -9,7 +9,7 @@ const demo3SrcMap = {
   './images/zjnews_web@2x.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo3/images/zjnews_web@2x.png',
 }
 
-const demo4SrcMap = {
+const demo04SrcMap = {
   '../images/bg.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo4/images/bg.png',
   '../images/home-top-shading.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo4/images/home-top-shading.png',
   '../images/home-head-right.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo4/images/home-head-right.png',
@@ -41,7 +41,7 @@ const demo4SrcMap = {
   '../images/logo.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo4/images/logo.png',
 }
 
-const demo5SrcMap = {
+const demo05SrcMap = {
   './imgs/4-1.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo5/imgs/4-1.png',
   './imgs/4-2.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo5/imgs/4-2.png',
   './imgs/startgame.png': 'http://juneandgreen.github.io/test/h5-to-miniprogram-demo/demo5/imgs/startgame.png',
@@ -73,27 +73,29 @@ const demo5SrcMap = {
 
 module.exports = {
   // 首页
-  index: 'demo1',
+  index: 'demo01',
   // 页面对应 url，默认是空串
   urlMap: {
-    demo1: 'https://to.miniprogram/demo1?a=1&b=2#hash',
-    demo2: 'https://to.miniprogram:5566/demo2',
-    demo3: 'http://127.0.0.1:8080/demo3',
-    demo4: 'http://127.0.0.1:8080/demo4',
-    demo5: 'http://127.0.0.1:8080/demo5',
-    demo6: 'http://127.0.0.1:8080/demo6',
-    demo7: 'http://127.0.0.1:8080/demo7',
-    demo8: 'http://127.0.0.1:8080/demo8',
+    demo01: 'https://to.miniprogram/demo1?a=1&b=2#hash',
+    demo02: 'https://to.miniprogram:5566/demo02',
+    demo03: 'http://127.0.0.1:8080/demo03',
+    demo04: 'http://127.0.0.1:8080/demo04',
+    demo05: 'http://127.0.0.1:8080/demo05',
+    demo06: 'http://127.0.0.1:8080/demo06',
+    demo07: 'http://127.0.0.1:8080/demo07',
+    demo08: 'http://127.0.0.1:8080/demo08',
+    demo09: 'http://127.0.0.1:8080/demo09',
+    demo10: 'http://127.0.0.1:8080/demo10',
   },
   // 资源路径过滤，用于调整资源路径
   resFilter(src, pageKey) {
     // 此处必须返回一个资源 url
-    if (pageKey === 'demo3') {
-      return demo3SrcMap[src] || src
-    } else if (pageKey === 'demo4') {
-      return demo4SrcMap[src] || src
-    } else if (pageKey === 'demo5') {
-      return demo5SrcMap[src] || src
+    if (pageKey === 'demo03') {
+      return demo03SrcMap[src] || src
+    } else if (pageKey === 'demo04') {
+      return demo04SrcMap[src] || src
+    } else if (pageKey === 'demo05') {
+      return demo05SrcMap[src] || src
     } else {
       return src
     }

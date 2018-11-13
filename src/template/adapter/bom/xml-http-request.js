@@ -1,6 +1,6 @@
 const load = require('../index')
 
-// TODO：上传、cookie、302 等
+// TODO：上传、302 等
 
 const EventTarget = load('EventTarget')
 

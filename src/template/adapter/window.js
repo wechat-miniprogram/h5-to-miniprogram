@@ -1,6 +1,7 @@
 const load = require('./index')
 
 const EventTarget = load('EventTarget')
+const Event = load('Event')
 const Location = load('Location')
 const Navigator = load('Navigator')
 const Node = load('Node')
@@ -33,6 +34,30 @@ class Window extends EventTarget {
     this._nowFetchingWebviewInfoPromise = null // 正在拉取 webview 端信息的 promise 实例
 
     this._fetchDeviceInfo()
+
+    // 补充实例的属性，用于 'xxx' in XXX 判断
+    this.onhashchange = null
+  }
+
+  /**
+   * 初始化内部事件
+   */
+  _initInnerEvent() {
+    // 监听 hashchange 事件
+    this._location.addEventListener('hashchange', ({oldURL, newURL}) => {
+      this._$trigger('hashchange', {
+        event: new Event({
+          name: 'input',
+          target: this,
+          eventPhase: Event.AT_TARGET,
+          _$extra: {
+            oldURL,
+            newURL,
+          },
+        }),
+        currentTarget: this,
+      })
+    })
   }
 
   /**

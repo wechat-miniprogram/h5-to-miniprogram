@@ -131,6 +131,7 @@ module.exports = function(loadModule, moduleName) {
 
 * Attribute
 * ClassList
+* ~~Comment~~
 * Element
 * Node
 * styleList

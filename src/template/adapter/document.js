@@ -5,6 +5,7 @@ const Tree = load('Tree')
 const Node = load('Node')
 const Element = load('Element')
 const TextNode = load('TextNode')
+const Comment = load('Comment')
 const tool = load('tool')
 const tagMap = load('tagMap')
 const cache = load('cache')
@@ -205,6 +206,12 @@ class Document extends EventTarget {
       content,
       nodeId: `b-${tool.getId()}`, // 运行时生成，使用 b- 前缀
     })
+  }
+
+  createComment() {
+    return new Comment({
+      nodeId: `b-${tool.getId()}`, // 运行时生成，使用 b- 前缀
+    }, this._tree)
   }
 
   createDocumentFragment() {

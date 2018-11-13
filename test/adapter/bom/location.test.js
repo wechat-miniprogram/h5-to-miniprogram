@@ -9,6 +9,7 @@ config.urlMap = {
 }
 
 const Location = load('Location')
+const Event = load('Event')
 
 let expectPagePath = ''
 global.wx.redirectTo = function(options) {
@@ -55,7 +56,17 @@ test('location: get', () => {
 
 test('location: set', () => {
   expectPagePath = ''
+  let hashChangeCount = 0
+  let oldURL = ''
+  let newURL = ''
+  let tempURL = ''
   const location = new Location('test1')
+  const onHashChange = evt => {
+    oldURL = evt.oldURL
+    newURL = evt.newURL
+    hashChangeCount++
+  }
+  location.addEventListener('hashchange', onHashChange)
 
   // protocol
   expect(location.protocol).toBe('https:')
@@ -148,17 +159,40 @@ test('location: set', () => {
 
   // hash
   expect(location.hash).toBe('#hash')
+  expect(hashChangeCount).toBe(0)
+  expect(oldURL).toBe('')
+  expect(newURL).toBe('')
+  tempURL = location.href
   location.hash = ''
   expect(location.hash).toBe('')
+  expect(hashChangeCount).toBe(1)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  tempURL = location.href
   location.hash = 'abc'
   expect(location.hash).toBe('#abc')
+  expect(hashChangeCount).toBe(2)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  tempURL = location.href
   location.hash = '#'
   expect(location.hash).toBe('')
+  expect(hashChangeCount).toBe(3)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  tempURL = location.href
   location.hash = '#cba'
   expect(location.hash).toBe('#cba')
+  expect(hashChangeCount).toBe(4)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  location.hash = 'cba'
+  expect(location.hash).toBe('#cba')
+  expect(hashChangeCount).toBe(4)
 
   // href
   expect(location.href).toBe('https://c.b.a/cc/aa?c=321#cba')
+  tempURL = location.href
   location.href = '//a.b.c/aa/bb?v=321#abc'
   expect(location.href).toBe('https://a.b.c/aa/bb?v=321#abc')
   expect(location.protocol).toBe('https:')
@@ -169,10 +203,29 @@ test('location: set', () => {
   expect(location.pathname).toBe('/aa/bb')
   expect(location.search).toBe('?v=321')
   expect(location.hash).toBe('#abc')
+  expect(hashChangeCount).toBe(5)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  tempURL = location.href
   location.href = 'c.b.a/mm/nn?p=456#000' // 不带协议，不以 / 开头
   expect(location.href).toBe('https://a.b.c/aa/c.b.a/mm/nn?p=456#000')
+  expect(hashChangeCount).toBe(6)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  tempURL = location.href
   location.href = '/haha/rr/ee?n=098#111' // 不带协议，以 / 开头
   expect(location.href).toBe('https://a.b.c/haha/rr/ee?n=098#111')
+  expect(hashChangeCount).toBe(7)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+  tempURL = location.href
+  location.href = '#222' // 不带协议，以 # 开头
+  expect(location.href).toBe('https://a.b.c/haha/rr/ee?n=098#222')
+  expect(hashChangeCount).toBe(8)
+  expect(oldURL).toBe(tempURL)
+  expect(newURL).toBe(location.href)
+
+  location.removeEventListener('hashchange', onHashChange)
 })
 
 test('location: replace/toString/_$open', () => {

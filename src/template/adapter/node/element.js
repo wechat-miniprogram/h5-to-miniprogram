@@ -2,12 +2,20 @@ const load = require('../index')
 
 const Attribute = load('Attribute')
 const Node = load('Node')
+const TextNode = load('TextNode')
 const ClassList = load('ClassList')
 const Style = load('Style')
 const cache = load('cache')
 const parser = load('parser')
 const tagMap = load('tagMap')
 const tool = load('tool')
+
+/**
+ * 检查节点是否需要进入 dom 树中
+ */
+function checkNeedToBeInTree(node) {
+  return node instanceof Element || node instanceof TextNode
+}
 
 class Element extends Node {
   constructor(options, tree) {
@@ -532,7 +540,7 @@ class Element extends Node {
   }
 
   appendChild(node) {
-    if (!(node instanceof Node)) return
+    if (!checkNeedToBeInTree(node)) return
 
     let nodes
     let hasUpdate = false
@@ -564,7 +572,7 @@ class Element extends Node {
   }
 
   removeChild(node) {
-    if (!(node instanceof Node)) return
+    if (!checkNeedToBeInTree(node)) return
 
     const index = this._children.indexOf(node)
 
@@ -585,8 +593,8 @@ class Element extends Node {
   }
 
   insertBefore(node, ref) {
-    if (!(node instanceof Node)) return
-    if (ref && !(ref instanceof Node)) return
+    if (!checkNeedToBeInTree(node)) return
+    if (ref && !checkNeedToBeInTree(ref)) return
 
     let nodes
     let hasUpdate = false
@@ -628,7 +636,7 @@ class Element extends Node {
   }
 
   replaceChild(node, old) {
-    if (!(node instanceof Node) || !(old instanceof Node)) return
+    if (!checkNeedToBeInTree(node) || !checkNeedToBeInTree(old)) return
 
     let nodes
     let hasUpdate = false

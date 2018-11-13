@@ -5,12 +5,15 @@
 const load = require('../index')
 
 const config = load('config')
+const EventTarget = load('EventTarget')
 
 const urlMap = config.urlMap || {}
 const HREF_CACHE = {}
 
-class Location {
+class Location extends EventTarget {
   constructor(pageKey) {
+    super()
+
     const {
       protocol, hostname, port, hash, search, pathname
     } = HREF_CACHE[pageKey] || {}
@@ -23,6 +26,9 @@ class Location {
     this._pathname = pathname || '/'
     this._search = search || ''
     this._hash = hash || ''
+
+    this._lastHash = ''
+    this._lastHref = ''
   }
 
   /**
@@ -222,6 +228,28 @@ class Location {
   }
 
   /**
+   * 开始检查 hash 变化
+   */
+  _startCheckHash() {
+    this._lastHash = this.hash
+    this._lastHref = this.href
+  }
+
+  /**
+   * 检查 hash 变化
+   */
+  _endCheckHash() {
+    if (this._lastHash !== this.hash) {
+      this._$trigger('hashchange', {
+        event: {
+          oldURL: this._lastHref,
+          newURL: this.href,
+        }
+      })
+    }
+  }
+
+  /**
    * 对外属性和方法
    */
   get href() {
@@ -231,11 +259,16 @@ class Location {
   set href(value) {
     if (!value || typeof value !== 'string') return
 
+    this._startCheckHash()
+
     if (!/^(([a-zA-Z0-9]+:)|(\/\/))/i.test(value)) {
       // 没有带协议
       if (value.indexOf('/') === 0) {
         // 以 / 开头，直接替换整个 pathname、search、hash
         value = `${this._protocol}//${this.host}${value}`
+      } else if (value.indexOf('#') === 0) {
+        // 以 # 开头，直接替换整个 hash
+        value = `${this._protocol}//${this.host}${this._pathname}${this._search}${value}`
       } else {
         // 非以 / 开头，则替换 pathname 的最后一段、search、hash
         let pathname = this._pathname.split('/')
@@ -257,6 +290,7 @@ class Location {
     this._search = search || ''
     this._hash = hash || ''
 
+    this._endCheckHash()
     this._checkUrl()
   }
 
@@ -381,6 +415,8 @@ class Location {
   set hash(value) {
     if (typeof value !== 'string') return
 
+    this._startCheckHash()
+
     if (!value || value === '#') {
       this._hash = ''
     } else {
@@ -390,6 +426,8 @@ class Location {
 
       this._hash = hash || ''
     }
+
+    this._endCheckHash()
   }
 
   reload() {
