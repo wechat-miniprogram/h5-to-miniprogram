@@ -34,6 +34,7 @@ class Window extends EventTarget {
     this._nowFetchingWebviewInfoPromise = null // 正在拉取 webview 端信息的 promise 实例
 
     this._fetchDeviceInfo()
+    this._initInnerEvent()
 
     // 补充实例的属性，用于 'xxx' in XXX 判断
     this.onhashchange = null

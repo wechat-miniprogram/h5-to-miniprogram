@@ -10,6 +10,17 @@ class Comment extends Node {
   }
 
   /**
+   * 对应的 dom 信息
+   */
+  get _$domInfo() {
+    return {
+      nodeId: this._nodeId,
+      pageId: this._pageId,
+      type: this._type,
+    }
+  }
+
+  /**
    * 对外属性和方法
    */
   get nodeType() {
