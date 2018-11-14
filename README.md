@@ -54,6 +54,9 @@ module.exports = {
 | output | String | 否 | 输出目录，输出的内容是一个完整可运行的小程序项目，默认为当前运行目录下的 h5\_to\_miniprogram\_output 目录中 |
 | config | String | 否 | 配置文件路径 |
 | extend | String/Array | 否 | 扩展实现文件路径，支持以数组方式传入多个扩展，下面会作详细介绍使用方式 |
+| compress | Boolean/Object | 否 | 压缩配置，当传入 true 时，表示所有压缩子项都为 true |
+| compress.jsInH5 | Boolean | 否 | 是否压缩原 h5 页面中的 js 和生成的初始抽象语法树代码 |
+| compress.cssInH5 | Boolean | 否 | 是否压缩原 h5 页面中的 css 和默认载入的初始 wxss |
 
 以下是一个使用此工具的范例：
 
@@ -70,6 +73,10 @@ toMiniprogram({
   output: '/output',
   config: '/config.js',
   extend: '/extend.js',
+  compress: {
+    jsInH5: true,
+    cssInH5: true,
+  },
 }).then(res => {
   console.log('done')
 }).catch(err => {
@@ -109,6 +116,7 @@ module.exports = function(loadModule, moduleName) {
 1. bom 相关
 
 * Cookie
+* History
 * LocalStorage
 * Location
 * Navigator
@@ -131,7 +139,7 @@ module.exports = function(loadModule, moduleName) {
 
 * Attribute
 * ClassList
-* ~~Comment~~
+* Comment
 * Element
 * Node
 * styleList

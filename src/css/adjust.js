@@ -3,6 +3,7 @@
  */
 
 const postcss = require('postcss')
+const cssnano = require('cssnano')
 
 const load = require('../template/adapter')
 const config = require('../config')
@@ -124,13 +125,28 @@ const adjustRemPlugin = function (rem) {
   })
 }
 
-module.exports = function (code, config = {}) {
+module.exports = async function (code, config = {}) {
   const resFilter = typeof config.resFilter === 'function' ? config.resFilter : (src => src)
   const rem = typeof config.rem === 'number' && isFinite(config.rem) ? config.rem : 0
   const entryKey = config.entryKey
+  const needCompress = config.needCompress
+  const pluginList = [replaceTagNamePlugin, formatPlugin, replaceImagePlugin(resFilter, entryKey), adjustRemPlugin(rem)]
 
-  return postcss([replaceTagNamePlugin, formatPlugin, replaceImagePlugin(resFilter, entryKey), adjustRemPlugin(rem)]).process(code, {
+  if (needCompress) {
+    // 压缩
+    pluginList.push(cssnano({
+      preset: ['default', {
+        discardComments: {
+          removeAll: true,
+        },
+      }]
+    }))
+  }
+
+  code = await postcss(pluginList).process(code, {
     from: undefined, // 主要是不想看到那个 warning
     map: null,
-  }).css
+  })
+
+  return code.css
 }

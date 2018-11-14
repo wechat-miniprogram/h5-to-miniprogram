@@ -29,6 +29,7 @@ class Location extends EventTarget {
 
     this._lastHash = ''
     this._lastHref = ''
+    this._allowCheck = true // 是否检查 url 和 hash 变化
   }
 
   /**
@@ -153,6 +154,15 @@ class Location extends EventTarget {
   }
 
   /**
+   * 不触发检查的方式替换 href
+   */
+  _$setHrefWithoutCheck(value) {
+    this._allowCheck = false
+    this.replace(value)
+    this._allowCheck = true
+  }
+
+  /**
    * 打开一个新页面
    */
   _$open(url) {
@@ -197,6 +207,8 @@ class Location extends EventTarget {
    * 检查 url 变化是否需要跳转
    */
   _checkUrl() {
+    if (!this._allowCheck) return
+
     const pageKeys = Object.keys(HREF_CACHE)
 
     for (const pageKey of pageKeys) {
@@ -231,6 +243,8 @@ class Location extends EventTarget {
    * 开始检查 hash 变化
    */
   _startCheckHash() {
+    if (!this._allowCheck) return
+
     this._lastHash = this.hash
     this._lastHref = this.href
   }
@@ -239,6 +253,8 @@ class Location extends EventTarget {
    * 检查 hash 变化
    */
   _endCheckHash() {
+    if (!this._allowCheck) return
+
     if (this._lastHash !== this.hash) {
       this._$trigger('hashchange', {
         event: {
@@ -250,13 +266,9 @@ class Location extends EventTarget {
   }
 
   /**
-   * 对外属性和方法
+   * 设置 href，不进入 history
    */
-  get href() {
-    return `${this._protocol}//${this.host}${this._pathname}${this._search}${this._hash}`
-  }
-
-  set href(value) {
+  _setHrefWithoutEnterHistory(value) {
     if (!value || typeof value !== 'string') return
 
     this._startCheckHash()
@@ -294,6 +306,29 @@ class Location extends EventTarget {
     this._checkUrl()
   }
 
+  /**
+   * 进入 history
+   */
+  _enterHistory() {
+    this._$trigger('_addToHistory', {
+      event: {
+        href: this.href,
+      }
+    })
+  }
+
+  /**
+   * 对外属性和方法
+   */
+  get href() {
+    return `${this._protocol}//${this.host}${this._pathname}${this._search}${this._hash}`
+  }
+
+  set href(value) {
+    this._setHrefWithoutEnterHistory(value)
+    this._enterHistory()
+  }
+
   get protocol() {
     return this._protocol
   }
@@ -309,7 +344,9 @@ class Location extends EventTarget {
       } else {
         this._protocol = `${parseRes[1]}:`
       }
+
       this._checkUrl()
+      this._enterHistory()
     }
   }
 
@@ -324,7 +361,9 @@ class Location extends EventTarget {
 
     this._hostname = hostname || this._hostname
     this._port = port || ''
+
     this._checkUrl()
+    this._enterHistory()
   }
 
   get hostname() {
@@ -337,7 +376,9 @@ class Location extends EventTarget {
     const {hostname} = Location._$parse(`//${value}`)
 
     this._hostname = hostname || this._hostname
+
     this._checkUrl()
+    this._enterHistory()
   }
 
   get port() {
@@ -352,7 +393,9 @@ class Location extends EventTarget {
     const port = value === 80 ? '' : value + ''
 
     this._port = port
+
     this._checkUrl()
+    this._enterHistory()
   }
 
   get origin() {
@@ -368,7 +411,9 @@ class Location extends EventTarget {
     this._protocol = protocol || this._protocol
     this._hostname = hostname || this._hostname
     this._port = port || ''
+
     this._checkUrl()
+    this._enterHistory()
   }
 
   get pathname() {
@@ -387,7 +432,9 @@ class Location extends EventTarget {
 
       this._pathname = pathname || '/'
     }
+
     this._checkUrl()
+    this._enterHistory()
   }
 
   get search() {
@@ -406,6 +453,8 @@ class Location extends EventTarget {
 
       this._search = search || ''
     }
+
+    this._enterHistory()
   }
 
   get hash() {
@@ -428,6 +477,7 @@ class Location extends EventTarget {
     }
 
     this._endCheckHash()
+    this._enterHistory()
   }
 
   reload() {
@@ -435,8 +485,8 @@ class Location extends EventTarget {
   }
 
   replace(value) {
-    // 和直接调用 location.href 的区别，不写入 history TODO
-    this.href = value
+    // 和直接赋值 location.href 不同，不需要进入 history
+    this._setHrefWithoutEnterHistory(value)
   }
 
   toString() {

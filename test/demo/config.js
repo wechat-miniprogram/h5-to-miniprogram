@@ -86,6 +86,8 @@ module.exports = {
     demo08: 'http://127.0.0.1:8080/demo08',
     demo09: 'http://127.0.0.1:8080/demo09',
     demo10: 'http://127.0.0.1:8080/demo10',
+    demo11: 'http://127.0.0.1:8080/demo11',
+    demo12: 'http://127.0.0.1:8080/demo12',
   },
   // 资源路径过滤，用于调整资源路径
   resFilter(src, pageKey) {

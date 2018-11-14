@@ -12,6 +12,10 @@ module.exports = async function (options) {
   const extendPath = options.extend
   let entry = options.entry || {}
   const output = options.output || path.join(process.pwd(), './h5_to_miniprogram_output')
+  const compress = options.compress === true ? {
+    jsInH5: true,
+    cssInH5: true,
+  } : (options.compress || {})
 
   let config = {}
   let indexEntry = '' // 首页
@@ -72,6 +76,7 @@ module.exports = async function (options) {
       cssList: entryInfo.style,
       config,
       entryKey,
+      compress,
     })
 
     // 生成脚本
@@ -82,6 +87,7 @@ module.exports = async function (options) {
       jsList: entryInfo.script,
       body: entryInfo.body,
       entryKey,
+      compress,
     })
 
     // 生成配置
@@ -96,5 +102,6 @@ module.exports = async function (options) {
     entryKeys,
     configPath,
     extendPath,
+    compress,
   })
 }

@@ -12,6 +12,7 @@ const CustomEvent = load('CustomEvent')
 const LocalStorage = load('LocalStorage')
 const SessionStorage = load('SessionStorage')
 const Screen = load('Screen')
+const History = load('History')
 
 class Window extends EventTarget {
   constructor(pageId, pageKey) {
@@ -30,6 +31,7 @@ class Window extends EventTarget {
     this._localStorage = new LocalStorage(pageId, this)
     this._sessionStorage = new SessionStorage(pageId, this)
     this._screen = new Screen()
+    this._history = new History(this._location)
 
     this._nowFetchingWebviewInfoPromise = null // 正在拉取 webview 端信息的 promise 实例
 
@@ -44,17 +46,30 @@ class Window extends EventTarget {
    * 初始化内部事件
    */
   _initInnerEvent() {
-    // 监听 hashchange 事件
+    // 监听 location 的事件
     this._location.addEventListener('hashchange', ({oldURL, newURL}) => {
       this._$trigger('hashchange', {
         event: new Event({
-          name: 'input',
+          name: 'hashchange',
           target: this,
           eventPhase: Event.AT_TARGET,
           _$extra: {
             oldURL,
             newURL,
           },
+        }),
+        currentTarget: this,
+      })
+    })
+
+    // 监听 history 的事件
+    this._history.addEventListener('popstate', ({state}) => {
+      this._$trigger('popstate', {
+        event: new Event({
+          name: 'popstate',
+          target: this,
+          eventPhase: Event.AT_TARGET,
+          _$extra: {state},
         }),
         currentTarget: this,
       })
@@ -208,6 +223,10 @@ class Window extends EventTarget {
 
   get screen() {
     return this._screen
+  }
+
+  get history() {
+    return this._history
   }
 
   get outerHeight() {

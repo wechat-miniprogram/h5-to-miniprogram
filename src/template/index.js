@@ -5,6 +5,7 @@ const config = require('../config')
 const load = require('../template/adapter')
 const ignoreGlobalVar = require('../js/ignore-global-var')
 const ignoreRewritelVar = require('../js/ignore-rewrite-var')
+const adjustCss = require('../css/adjust')
 
 const tagMap = load('tagMap')
 
@@ -26,6 +27,7 @@ module.exports = {
     const entryKeys = options.entryKeys
     const configPath = options.configPath
     const extendPath = options.extendPath
+    const compress = options.compress
 
     // 拷贝模板
     for (const fileName of fileList) {
@@ -138,10 +140,18 @@ module.exports = {
       }
     }, null, config.indent))
 
-    // common/js/init-global-var.js
+    // common/js/init-global-var.js，用于将一些全局变量挂在 window 下
     const needRewriteVar = ignoreGlobalVar.filter(name => ignoreRewritelVar.indexOf(name) < 0)
     const initGlobalCode = needRewriteVar.map(name => `try{window['${name}'] = ${name};}catch(err){console.log('${name} not suporrt');}`).join('')
-    await _.writeFile(path.join(output, './common/js/init-global-var.js'), `module.exports = function(window, document) {${initGlobalCode}};`)
+    await _.writeFile(path.join(output, './common/js/init-global-var.js'), `module.exports=function(window,document){${initGlobalCode}};`)
+
+    // common/js/init-document-var.js，用于将一些变量挂在 document 下
+    await _.writeFile(path.join(output, './common/js/init-document-var.js'), `module.exports=function(window,document){document.location=window.location};`)
+
+    // common/wxss/original.wxss，各个标签的初始样式
+    let originalContent =await _.readFile(path.join(__dirname, './original.wxss.tmpl'))
+    if (!!compress.cssInH5) originalContent = await adjustCss(originalContent, {needCompress: true})
+    await _.writeFile(path.join(output, './common/wxss/original.wxss'), originalContent)
 
     // 相关配置
     if (typeof configPath === 'string') {

@@ -26,6 +26,7 @@ class Event {
     this._touches = null
     this._targetTouches = null
     this._changedTouches = null
+    this._cancelable = false
 
     // 补充字段
     const extra = options._$extra
@@ -100,8 +101,7 @@ class Event {
   }
 
   get cancelable() {
-    // 因为不支持 preventDefault，所以永远返回 false
-    return false
+    return this._cancelable
   }
 
   get target() {
@@ -141,7 +141,8 @@ class Event {
   }
 
   preventDefault() {
-    // 目前无法支持
+    // 目前仅支持 a 标签的点击阻止
+    this._cancelable = true
   }
 
   stopPropagation() {

@@ -137,12 +137,12 @@ Component({
     /**
      * 触发事件
      */
-    callEvent(evt, eventName) {
+    callEvent(evt, eventName, extra) {
       const pageId = this.pageId
       const originNodeId = evt.currentTarget.dataset.privateNodeId || this.nodeId
       const originNode = cache.getNode(pageId, originNodeId)
 
-      EventTarget._$process(originNode, eventName, evt)
+      EventTarget._$process(originNode, eventName, evt, extra)
     },
 
     /**
@@ -165,7 +165,7 @@ Component({
         this.callEvent(evt, 'touchend')
 
         setTimeout(() => {
-          this.callEvent(evt, 'click')
+          this.callEvent(evt, 'click', {button: 0}) // 默认左键
         }, 0)
       }
     },
@@ -232,13 +232,18 @@ Component({
     initA() {
       const window = this.window
 
-      this.domNode.addEventListener('click', () => {
-        // 处理 a 标签的跳转
-        const href = this.domNode.href
-        const target = this.domNode.target
+      this.domNode.addEventListener('click', evt => {
+        // 延迟触发跳转，先等所有同步回调处理完成
+        setTimeout(() => {
+          if (evt.cancelable) return
 
-        if (target === '_blank') window.open(href)
-        else window.location.href = href
+          // 处理 a 标签的跳转
+          const href = this.domNode.href
+          const target = this.domNode.target
+
+          if (target === '_blank') window.open(href)
+          else window.location.href = href
+        }, 0)
       })
     },
 

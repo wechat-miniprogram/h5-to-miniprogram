@@ -15,6 +15,7 @@ module.exports = {
     const jsList = options.jsList
     const body = options.body
     const entryKey = options.entryKey
+    const needCompress = !!options.compress.jsInH5
     const dirPath = path.dirname(entry)
 
     // 依赖
@@ -36,7 +37,9 @@ module.exports = {
     // 遍历页面中的静态 js
     for (const js of jsList) {
       if (js.type === 'inner') {
-        content.push(`${config.indent}/* inner script */\n${adjust(js.content)}`)
+        const adjustContent = await adjust(js.content, needCompress)
+
+        content.push(`${config.indent}/* inner script */\n${adjustContent}`)
       } else if (js.type === 'outer') {
         let jsPath = js.src
         let srcContent
@@ -54,14 +57,15 @@ module.exports = {
           // 写入 common 目录
           const extname = path.extname(jsPath)
           const filename = `${path.basename(jsPath, extname)}-${_.hash(srcContent)}.js`
+          const adjustContent = await adjust(srcContent, needCompress)
 
           await _.writeFile(path.join(commonOutput, filename), [
-            'module.exports = function(window, document) {',
-            'let module = undefined;',
-            'let global = window;',
-            `(function() {${adjust(srcContent)}}).call(window)`, // 保证 this 指向 window
+            'module.exports=function(window,document){',
+            'var module=undefined;',
+            'var global=window;',
+            `(function(){${adjustContent}}).call(window)`, // 保证 this 指向 window
             '};',
-          ].join('\n'))
+          ].join(''))
           content.push(`${config.indent}/* outer script: ${js.src} */\n${config.indent}require('../../common/js/${filename}')(window, document);`)
         }
       }
@@ -79,6 +83,7 @@ module.exports = {
     await _.writeFile(output, content)
 
     // 输出页面 ast
-    await _.writeFile(path.join(path.dirname(output), './ast.js'), `module.exports = ${JSON.stringify(body)};`)
+    const astContent = needCompress ? JSON.stringify(body) : JSON.stringify(body, null, config.indent)
+    await _.writeFile(path.join(path.dirname(output), './ast.js'), `module.exports = ${astContent};`)
   }
 }

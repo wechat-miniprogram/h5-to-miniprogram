@@ -26,6 +26,11 @@ toMiniprogram({
   config: path.join(__dirname, './config.js'),
   // 扩展实现文件
   extend: [path.join(__dirname, './extend1.js'), path.join(__dirname, './extend2.js')],
+  // 压缩配置
+  compress: {
+    jsInH5: true, // 原 h5 页面中的 js
+    cssInH5: true, // 原 h5 页面中的 css
+  },
 }).then(res => {
   console.log('done')
 }).catch(err => {

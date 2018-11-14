@@ -14,8 +14,9 @@ module.exports = {
     const cssList = options.cssList
     const config = options.config
     const entryKey = options.entryKey
+    const needCompress = !!options.compress.cssInH5
     const dirPath = path.dirname(entry)
-    const adjustConfig = {entryKey, ...config}
+    const adjustConfig = {entryKey, needCompress, ...config}
 
     let content = [
       '/* original user agent stylesheet */\n@import "../../common/wxss/original.wxss";'
@@ -42,8 +43,9 @@ module.exports = {
           // 写入 common 目录
           const extname = path.extname(cssPath)
           const filename = `${path.basename(cssPath, extname)}-${_.hash(linkContent)}.wxss`
+          const adjustContent = await adjust(linkContent, adjustConfig)
 
-          await _.writeFile(path.join(commonOutput, filename), adjust(linkContent, adjustConfig))
+          await _.writeFile(path.join(commonOutput, filename), adjustContent)
           content.push(`/* link style: ${css.src} */\n@import "../../common/wxss/${filename}";`)
         }
       }
@@ -52,6 +54,7 @@ module.exports = {
     content = content.join('\n\n')
 
     // 输出到 output 中
-    await _.writeFile(output, adjust(content, adjustConfig))
+    const adjustContent = await adjust(content, adjustConfig)
+    await _.writeFile(output, adjustContent)
   }
 }

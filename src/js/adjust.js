@@ -58,7 +58,7 @@ function adjustTopFuncDecl(ast, magicString) {
   return magicString.toString()
 }
 
-module.exports = function (code) {
+module.exports = async function (code, needCompress) {
   const comments = []
   const ast = acorn.parse(code, {
     sourceType: 'script',
@@ -74,12 +74,18 @@ module.exports = function (code) {
   code = replaceGlobal(ast, magicString)
   code = adjustTopFuncDecl(ast, magicString)
 
-  // 转换代码
-  code = babel.transformSync(code, {
-    minified: false,
-    compact: false,
-    comments: false,
-  }).code
+  const plugins = []
+  if (needCompress) {
+    plugins.push('babel-plugin-minify-mangle-names')
+  }
 
-  return code
+  // 转换代码
+  code = await babel.transform(code, {
+    minified: needCompress,
+    compact: needCompress, // 不包含多余的空格符和换行符
+    comments: false,
+    plugins,
+  })
+
+  return code.code
 }

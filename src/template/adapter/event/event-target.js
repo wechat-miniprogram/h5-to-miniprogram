@@ -37,7 +37,7 @@ class EventTarget {
   /**
    * 触发事件捕获、冒泡流程
    */
-  static _$process(target, eventName, miniprogramEvent) {
+  static _$process(target, eventName, miniprogramEvent, extra) {
     let event
 
     if (eventName instanceof CustomEvent) {
@@ -70,6 +70,7 @@ class EventTarget {
         touches: miniprogramEvent.touches,
         changedTouches: miniprogramEvent.changedTouches,
         bubbles: true, // 默认都可以冒泡 TODO
+        _$extra: extra,
       })
     }
 
