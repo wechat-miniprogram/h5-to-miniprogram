@@ -1,6 +1,6 @@
 {
   "name": "h5-to-miniprogram",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "a simple tool for transforming h5 to miniprogam",
   "main": "index.js",
   "scripts": {
