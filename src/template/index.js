@@ -146,11 +146,11 @@ module.exports = {
     await _.writeFile(path.join(output, './common/js/init-global-var.js'), `module.exports=function(window,document){${initGlobalCode}};`)
 
     // common/js/init-document-var.js，用于将一些变量挂在 document 下
-    await _.writeFile(path.join(output, './common/js/init-document-var.js'), `module.exports=function(window,document){document.location=window.location};`)
+    await _.writeFile(path.join(output, './common/js/init-document-var.js'), 'module.exports=function(window,document){document.location=window.location};')
 
     // common/wxss/original.wxss，各个标签的初始样式
-    let originalContent =await _.readFile(path.join(__dirname, './original.wxss.tmpl'))
-    if (!!compress.cssInH5) originalContent = await adjustCss(originalContent, {needCompress: true})
+    let originalContent = await _.readFile(path.join(__dirname, './original.wxss.tmpl'))
+    if (compress.cssInH5) originalContent = await adjustCss(originalContent, {needCompress: true})
     await _.writeFile(path.join(output, './common/wxss/original.wxss'), originalContent)
 
     // 相关配置

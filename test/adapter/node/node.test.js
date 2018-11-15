@@ -217,8 +217,8 @@ test('node: innerHTML/outerHTML', () => {
     expect(aUpdateCount).toBe(6)
     expect(a.tagName).toBe('ARTICLE')
     expect(a.id).toBe('outer')
-    expect(a.innerHTML).toEqual('<span id="abc"></span><div id="cc" class="a b c" style="position:absolute;top:10px;left:20px;">123<span id="cba">555</span>321</div><br />')
-    expect(a.outerHTML).toEqual('<article id="outer"><span id="abc"></span><div id="cc" class="a b c" style="position:absolute;top:10px;left:20px;">123<span id="cba">555</span>321</div><br /></article>')
+    expect(a.innerHTML).toBe('<span id="abc"></span><div id="cc" class="a b c" style="position:absolute;top:10px;left:20px;">123<span id="cba">555</span>321</div><br />')
+    expect(a.outerHTML).toBe('<article id="outer"><span id="abc"></span><div id="cc" class="a b c" style="position:absolute;top:10px;left:20px;">123<span id="cba">555</span>321</div><br /></article>')
     
     a.innerHTML = '<div id="a">321<span id="inner" b="inner">765</span>123</div><div id="c">555</div><p style="color: green; text-align: center;">I am content</p>'
     expect(a.childNodes.length).toBe(3)

@@ -1,21 +1,25 @@
 /**
- * 支持的样式属性列表
+ * 支持的样式属性列表，默认只包含常用的样式属性
  */
 
-// TODO 需要补完其他属性
 module.exports = [
-  'position', 'top', 'right', 'bottom', 'left',
-  'display', 'width', 'height',
+  'position', 'top', 'bottom', 'right', 'left', 'float', 'clear',
+  'display', 'width', 'height', 'maxHeight', 'maxWidth', 'minHeight', 'minWidth', 'flexBasis', 'flexGrow', 'flexShrink', 'flexDirection', 'flexWrap', 'justifyContent', 'alignItems',
+  'padding', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop',
+  'margin', 'marginBottom', 'marginLeft', 'marginRight', 'marginTop',
 
-  'border', 'borderRadius',
+  'background', 'backgroundClip', 'backgroundColor', 'backgroundImage', 'backgroundOrigin', 'backgroundPosition', 'backgroundRepeat', 'backgroundSize',
+  'border', 'borderRadius', 'borderBottomColor', 'borderBottomLeftRadius', 'borderBottomRightRadius', 'borderBottomStyle', 'borderBottomWidth', 'borderCollapse', 'borderImageOutset', 'borderImageRepeat', 'borderImageSlice', 'borderImageSource', 'borderImageWidth', 'borderLeftColor', 'borderLeftStyle', 'borderLeftWidth', 'borderRightColor', 'borderRightStyle', 'borderRightWidth', 'borderTopColor', 'borderTopLeftRadius', 'borderTopRightRadius', 'borderTopStyle', 'borderTopWidth',
+  'outline',
 
-  'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-  'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+  'animation', 'animationDelay', 'animationDirection', 'animationDuration', 'animationFillMode', 'animationIterationCount', 'animationName', 'animationPlayState', 'animationTimingFunction',
+  'transition', 'transitionDelay', 'transitionDuration', 'transitionProperty', 'transitionTimingFunction',
+  'transform', 'transformOrigin', 'perspective', 'perspectiveOrigin', 'backfaceVisibility',
 
-  'background', 'backgrounColor', 'backgroundImage', 'backgroundSize',
-  'boxShadow', 'animation', 'opacity', 'transform', 'transformOrigin', 'transition', 'transitionDuration', 'visibility',
+  'font', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight',
+  'color', 'textAlign', 'textDecoration', 'textIndent', 'textRendering', 'textShadow', 'textOverflow', 'textTransform',
+  'wordBreak', 'wordSpacing', 'wordWrap', 'lineHeight', 'letterSpacing', 'whiteSpace', 'userSelect',
 
-  'color', 'fontSize', 'fontFamily', 'fontWeight', 'textAlign',
-
-  'zIndex'
+  'visibility', 'opacity', 'zIndex', 'zoom', 'overflow', 'overflowX', 'overflowY',
+  'boxShadow', 'boxSizing', 'content', 'cursor', 'direction', 'listStyle', 'objectFit', 'pointerEvents', 'resize', 'verticalAlign', 'willChange', 'clip', 'clipPath', 'fill'
 ]

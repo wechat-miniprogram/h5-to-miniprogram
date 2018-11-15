@@ -1,5 +1,7 @@
 const path = require('path')
 
+const request = require('request-promise-native')
+
 const _ = require('../utils')
 const adjust = require('./adjust')
 
@@ -15,6 +17,7 @@ module.exports = {
     const config = options.config
     const entryKey = options.entryKey
     const needCompress = !!options.compress.cssInH5
+    const proxy = options.proxy
     const dirPath = path.dirname(entry)
     const adjustConfig = {entryKey, needCompress, ...config}
 
@@ -35,8 +38,16 @@ module.exports = {
           cssPath = path.join(dirPath, cssPath)
           linkContent = await _.readFile(cssPath)
         } else {
-          // 绝对路径或者网络 url
-          // TODO
+          // 其他
+          const isFileExists = await _.checkFileExists(cssPath)
+
+          if (isFileExists) {
+            // 绝对路径
+            linkContent = await _.readFile(cssPath)
+          } else {
+            // 网络 url
+            linkContent = await request.get({url: cssPath, proxy})
+          }
         }
 
         if (linkContent) {

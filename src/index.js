@@ -16,6 +16,7 @@ module.exports = async function (options) {
     jsInH5: true,
     cssInH5: true,
   } : (options.compress || {})
+  const proxy = options.proxy
 
   let config = {}
   let indexEntry = '' // 首页
@@ -77,6 +78,7 @@ module.exports = async function (options) {
       config,
       entryKey,
       compress,
+      proxy,
     })
 
     // 生成脚本
@@ -88,6 +90,7 @@ module.exports = async function (options) {
       body: entryInfo.body,
       entryKey,
       compress,
+      proxy,
     })
 
     // 生成配置

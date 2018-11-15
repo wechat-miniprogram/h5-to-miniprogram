@@ -2,6 +2,13 @@
 
 这是一个尝试让 h5 页面在微信小程序中运行的构建转换工具。
 
+## 原理简介
+
+将 h5 页面转成微信小程序里的页面，通过适配层代码在微信小程序中维护一棵模拟出来的 dom 树，并模拟出类似浏览器环境的 dom/bom 接口，进而让 h5 页面在微信小程序中运行。
+
+> PS：需要注意的是，因为微信小程序的特殊运行环境，并不能做到完美转换。例如跳转页面授权写 cookie 的方式就暂时无法实现。
+> PS：这是一个运行在最底层的适配做法，理论上来说 jQuery、react、vue 等 web 框架/库也能在一定程度上兼容使用。
+
 ## 安装
 
 ```
@@ -57,6 +64,7 @@ module.exports = {
 | compress | Boolean/Object | 否 | 压缩配置，当传入 true 时，表示所有压缩子项都为 true |
 | compress.jsInH5 | Boolean | 否 | 是否压缩原 h5 页面中的 js 和生成的初始抽象语法树代码 |
 | compress.cssInH5 | Boolean | 否 | 是否压缩原 h5 页面中的 css 和默认载入的初始 wxss |
+| proxy | String | 否 | 当原 h5 页面引用了一些网络 js、css 文件，则构建过程可能存在网络请求，此处可配网络请求的代理 |
 
 以下是一个使用此工具的范例：
 
@@ -180,3 +188,6 @@ module.exports = function(loadModule, moduleName) {
 
 *  wxss 的 id 选择器依赖 2.3.2 基础库。
 
+## 其他相关文档
+
+* [更新日志](./UPDATE.md)
