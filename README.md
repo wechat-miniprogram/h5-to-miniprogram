@@ -190,4 +190,5 @@ module.exports = function(loadModule, moduleName) {
 
 ## 其他相关文档
 
+* [一个简单的 demo](https://github.com/wechat-miniprogram/h5-to-miniprogram-demo)
 * [更新日志](./UPDATE.md)
