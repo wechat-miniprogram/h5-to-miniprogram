@@ -63,7 +63,6 @@ Component({
   },
   options: {
     addGlobalClass: true, // 开启全局样式
-    addGlobalId: true, // 开启全局 id
   },
   attached() {
     const nodeId = this.dataset.privateNodeId
